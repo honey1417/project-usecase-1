@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-uc1-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: usecase-1
+  template:
+    metadata:
+      labels:
+        project: usecase-1
+    spec:
+      containers:
+      - name: proj-uc1-container
+        image: hharshini1402/my-project-uc-1:latest
+        ports:
+        - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proj-uc1-service
+spec:
+  selector:
+    project: usecase-1
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8081
+  type: LoadBalancer #Exposes the app to external Traffic
