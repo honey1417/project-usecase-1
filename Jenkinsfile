@@ -24,7 +24,7 @@ pipeline {
     stages {
         stage('Cloning the Git Repository') {
             steps {
-                git branch: 'main', credentialsID: 'github-pat', url: "${params.GIT_REPO}"
+                git branch: 'main', credentialsId: 'github-pat', url: "${params.GIT_REPO}"
             }
         }
 
