@@ -14,8 +14,8 @@ pipeline {
         IMAGE_NAME = "my-project-uc-1"
         IMAGE_TAG = "${BUILD_NUMBER}"
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-svc-acc-key')
-        DOCKER_HUB_USERNAME = "harshini1402"
-        DOCKER_HUB_PASSWORD = credentials('harshini-docker-hub-creds')
+        DOCKER_HUB_USR = "harshini1402"
+        DOCKER_HUB_PSW = credentials('harshini-docker-hub-creds')
     }
     
     tools {
@@ -49,7 +49,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+                    echo $DOCKER_HUB_PSW | docker login -u $DOCKER_HUB_USR --password-stdin
                     """
                 }
             }
@@ -99,7 +99,7 @@ pipeline {
                 script {
                     echo 'Updating Deployment YAML with latest Docker image...'
                     sh """
-                    sed -i 's|image: .*|image: ${DOCKER_HUB_USERNAME}/${IMAGE_NAME}:${IMAGE_TAG}|' deploy.yml
+                    sed -i 's|image: .*|image: ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}|' deploy.yml
                     """
                 }
             }
