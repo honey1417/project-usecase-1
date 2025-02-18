@@ -31,13 +31,6 @@ pipeline {
                 }
             }
         }
-        stage('Checkout') {
-            steps {
-                script {
-                    sh '/bin/git clone https://github.com/honey1417/project-usecases.git'
-                }
-            }
-        }
         stage('Cloning the Git Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/honey1417/project-usecases.git'
