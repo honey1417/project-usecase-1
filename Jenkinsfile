@@ -13,9 +13,9 @@ pipeline {
         GKE_REGION = "us-central1"
         IMAGE_NAME = "my-project-uc-1"
         IMAGE_TAG = "${BUILD_NUMBER}"
-        GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-svc-acc-key')
+        GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-creds')
         DOCKER_HUB_USR = "harshini1402"
-        DOCKER_HUB_PSW = credentials('harshini-docker-hub-creds')
+        DOCKER_HUB_PSW = credentials('docker-creds')
     }
     
     tools {
@@ -50,9 +50,10 @@ pipeline {
                 sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'  
             }
         }
+
         stage('Login to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'harshini-docker-hub-creds', usernameVariable: 'DOCKER_HUB_USR', passwordVariable: 'DOCKER_HUB_PSW')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'DOCKER_HUB_USR', passwordVariable: 'DOCKER_HUB_PSW')]) {
                     script {
                         // Secure Docker login with Jenkins credentials
                         sh '''
@@ -92,7 +93,7 @@ pipeline {
             steps {
                 script {
                     echo 'Applying Terraform config to Create GCP Resources'
-                    withCredentials([file(credentialsId: 'gcp-svc-acc-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                    withCredentials([file(credentialsId: 'gcp-creds', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                         sh '''
                         gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}
                         export GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
@@ -116,7 +117,7 @@ pipeline {
 
         stage('Deploy Application') {
             steps {
-                withCredentials([file(credentialsId: 'gcp-svc-acc-key', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
+                withCredentials([file(credentialsId: 'gcp-creds', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                     script {
                         echo 'Authenticating with GCP...'
                         sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
