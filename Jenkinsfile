@@ -8,6 +8,7 @@ pipeline {
     } 
 
     environment {
+        GITHUB_TOKEN = credentials('github-pat')
         PROJECT_ID = "harshini-450807"
         GKE_CLUSTER = "usecase-1-cluster"
         GKE_REGION = "us-central1"
