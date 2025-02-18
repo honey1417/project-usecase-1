@@ -2,8 +2,8 @@ pipeline {
     agent any
     parameters {
         choice(name: 'DEPLOY_ENV', choices: ['dev', 'stage', 'prod'], description: 'Deployment environment')
-        booleanParam(name: 'ROLLBACK', defaultValue: false, description: 'Rollback to Previous Version?' )
-        
+        booleanParam(name: 'ROLLBACK', defaultValue: false, description: 'Rollback to Previous Version?')
+        booleanParam(name: 'CREATE_CLUSTER', defaultValue: false, description: 'Create GCP Kubernetes Cluster?')
     } 
 
     environment {
@@ -17,6 +17,7 @@ pipeline {
         DOCKER_HUB_USERNAME = "harshini1402"
         DOCKER_HUB_PASSWORD = credentials('harshini-docker-hub-creds')
     }
+    
     tools {
         jdk 'jdk-17'
         maven 'maven-3.8.8'
@@ -27,14 +28,14 @@ pipeline {
         stage('Test Git Command') {
             steps {
                 script {
-                    sh 'git --version'  
+                    sh 'git --version'
                 }
             }
         }
+
         stage('Cloning the Git Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/honey1417/project-usecases.git'
-
             }
         }
 
