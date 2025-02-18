@@ -50,6 +50,18 @@ pipeline {
                 sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'  
             }
         }
+        stage('Login to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'harshini-docker-hub-creds', usernameVariable: 'DOCKER_HUB_USR', passwordVariable: 'DOCKER_HUB_PSW')]) {
+                    script {
+                        // Secure Docker login with Jenkins credentials
+                        sh '''
+                            echo $DOCKER_HUB_PSW | docker login -u $DOCKER_HUB_USR --password-stdin
+                        '''
+                    }
+                }
+            }
+        }
 
         stage('Push Docker image to Docker Hub') {
             steps {
