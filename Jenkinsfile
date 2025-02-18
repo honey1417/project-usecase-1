@@ -3,7 +3,7 @@ pipeline {
     parameters {
         choice(name: 'DEPLOY_ENV', choices: ['dev', 'stage', 'prod'], description: 'Deployment environment')
         booleanParam(name: 'ROLLBACK', defaultValue: false, description: 'Rollback to Previous Version?' )
-        booleanParam(name: 'CREATE_CLUSTER', defaultValue: false, description: 'Create a new cluster?' )
+        
     } 
 
     environment {
