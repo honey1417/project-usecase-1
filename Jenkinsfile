@@ -27,7 +27,7 @@ pipeline {
         stage('Test Git Command') {
             steps {
                 script {
-                    sh '/bin/git --version'  // Use full path to Git
+                    sh 'git --version'  
                 }
             }
         }
