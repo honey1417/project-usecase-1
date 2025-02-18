@@ -24,11 +24,17 @@ pipeline {
     }
 
     stages {
+        
         stage('Test Git') {
             steps {
                 script {
                     sh 'git --version'
                 }
+            }
+        }
+        stage('Checkout') {
+            steps {
+                checkout scm
             }
         }
 
