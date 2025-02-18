@@ -24,20 +24,20 @@ pipeline {
     }
 
     stages {
-        
-        stage('Test Git') {
+        stage('Test Git Command') {
             steps {
                 script {
-                    sh 'git --version'
+                    sh '/bin/git --version'  // Use full path to Git
                 }
             }
         }
         stage('Checkout') {
             steps {
-                checkout scm
+                script {
+                    sh '/bin/git clone https://github.com/honey1417/project-usecases.git'
+                }
             }
         }
-
         stage('Cloning the Git Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/honey1417/project-usecases.git'
