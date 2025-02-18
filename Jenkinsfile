@@ -45,13 +45,12 @@ pipeline {
             }
         }
 
-       stage('Login to Docker Hub') {
+        stage('Login to Docker Hub') {
             steps {
                 script {
-                    // Securely pass Docker password using stdin
-                    sh '''
-                        echo "$DOCKER_HUB_PASSWORD" | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin
-                    '''
+                    sh """
+                    echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_HUB_USERNAME --password-stdin
+                    """
                 }
             }
         }
