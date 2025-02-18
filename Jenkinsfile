@@ -22,7 +22,16 @@ pipeline {
         maven 'maven-3.8.8'
         git 'git'
     }
+
     stages {
+        stage('Test Git') {
+            steps {
+                script {
+                    sh 'git --version'
+                }
+            }
+        }
+        
         stage('Cloning the Git Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/honey1417/project-usecases.git'
