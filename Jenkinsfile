@@ -60,7 +60,7 @@ pipeline {
                             echo $DOCKER_HUB_PSW | docker login -u $DOCKER_HUB_USR --password-stdin
                         '''
                          sh 'docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}'
-                         sh 'docker push ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TA
+                         sh 'docker push ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}'
                     }
                 }
             }
