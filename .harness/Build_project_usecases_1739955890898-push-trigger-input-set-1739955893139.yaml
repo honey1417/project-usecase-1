@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_project_usecases_1739955890898-push-trigger-input-set
+  identifier: Build_project_usecases_1739955890898pushtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: SFTY_Training
+  pipeline:
+    identifier: Build_project_usecases_1739955890898
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>
