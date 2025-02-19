@@ -141,6 +141,10 @@ pipeline {
                         """
 
                         // Deploy to Kubernetes
+                        // Update deploy.yml with correct image tag
+                        sh """
+                        sed -i 's|image: harshini1402/usecase-1:latest|image: harshini1402/usecase-1:${DOCKER_TAG}|' deploy.yml
+                        """
                         sh 'kubectl apply -f deploy.yml'
                         sh 'kubectl set image deployment/project-uc1-deployment  project-uc1-container=${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}'
                         sh 'kubectl rollout status deployment/project-uc1-deployment' 
