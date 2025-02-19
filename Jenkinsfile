@@ -75,7 +75,8 @@ pipeline {
                         // sh "docker tag ${env.IMAGE_NAME}:${env.IMAGE_TAG} ${env.DOCKER_HUB_USR}/${env.IMAGE_NAME}:${env.IMAGE_TAG}"
 
                         echo "Pushing Image to Docker Hub..."
-                        sh 'docker push harshini1402/csk:latest'
+                        sh 'docker tag csk:latest harshini1402/csk:latest'
+
                     }
 
                     echo "Docker Push Completed Successfully!"
