@@ -8,7 +8,7 @@ resource "google_container_cluster" "primary" {
         machine_type = var.MACHINE_TYPE 
         disk_size_gb = 30
         oath_scopes = [
-            ""https://www.googleapis.com/auth/cloud-platform"
+            "https://www.googleapis.com/auth/cloud-platform"
         ]
     }
 }
