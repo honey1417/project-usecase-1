@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: proj-uc1-container
-        image: hharshini1402/my-project-uc-1:latest
+        image: harshini1402/usecase-1:${DOCKER_TAG}
         ports:
         - containerPort: 8080
 
