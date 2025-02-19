@@ -130,13 +130,13 @@ pipeline {
                         // Deploy to Kubernetes
                         sh 'kubectl apply -f deploy.yml'
                         sh 'kubectl set image deployment/project-uc1-deployment  project-uc1-deployment=${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}'
-                        sh 'kubectl rollout status deployment 
+                        sh 'kubectl rollout status deployment' 
                         sh 'sleep 15'
                         sh 'kubectl get deployments'
                         sh 'kubectl describe deployment project-uc1-deployment'
                         sh 'kubectl get pods'
                         sh 'kubectl get svc'
-                        echo 'Deployment and service details retrieved.'
+                        echo 'Deployment and service details retrieved'
                     }
                 }
             }
