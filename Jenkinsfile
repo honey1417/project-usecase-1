@@ -133,7 +133,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'gcp-creds', variable: 'GOOGLE_APPLICATION_CREDENTIALS')]) {
                     script {
                         echo 'Authenticating with GCP...'
-                        sh 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS'
+                        sh "gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS"
 
                         // Get Kubernetes credentials
                         sh """
@@ -142,8 +142,8 @@ pipeline {
 
                         // Deploy to Kubernetes
                         sh 'kubectl apply -f deploy.yml'
-                        sh 'kubectl set image deployment/project-uc1-deployment  project-uc1-deployment=${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}'
-                        sh 'kubectl rollout status deployment' 
+                        sh 'kubectl set image deployment/project-uc1-deployment  project-uc1-container=${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}'
+                        sh 'kubectl rollout status deployment/project-uc1-deployment' 
                         sh 'sleep 15'
                         sh 'kubectl get deployments'
                         sh 'kubectl describe deployment project-uc1-deployment'
