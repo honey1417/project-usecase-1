@@ -55,18 +55,15 @@ pipeline {
         stage('Login to Docker Hub') {
             steps {
                 script {
-        
-                    withCredentials([string(credentialsId: 'docker-creds', variable: 'docker-creds')]) {
-                    sh """
-                    //echo $DOCKER_HUB_PSW | docker login -u $DOCKER_HUB_USR --password-stdin
-
-                    docker login -u $DOCKER_HUB_USR --password-stdin
-
+                    withCredentials([string(credentialsId: 'docker-creds', variable: 'DOCKER_HUB_TOKEN')]) {
+                        sh """
+                        echo "$DOCKER_HUB_TOKEN" | docker login -u "harshini1402" --password-stdin
+                        """
                     }
-                    """
                 }
             }
         }
+
 
         stage('Push Docker Image to Docker Hub') {
             steps {
