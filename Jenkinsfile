@@ -55,9 +55,9 @@ pipeline {
         stage('Login to Docker Hub') {
             steps {
                 script {
-                    sh """
+        
                     withCredentials([string(credentialsId: 'docker-creds', variable: 'docker-creds')]) {
-                    
+                    sh """
                     //echo $DOCKER_HUB_PSW | docker login -u $DOCKER_HUB_USR --password-stdin
 
                     docker login -u $DOCKER_HUB_USR --password-stdin
