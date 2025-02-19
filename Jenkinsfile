@@ -71,11 +71,11 @@ pipeline {
                             echo $DOCKER_HUB_PSW | docker login -u $DOCKER_HUB_USR --password-stdin
                         '''
                         
-                        echo "Tagging Image..."
-                        sh "docker tag ${env.IMAGE_NAME}:${env.IMAGE_TAG} ${env.DOCKER_HUB_USR}/${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+                        // echo "Tagging Image..."
+                        // sh "docker tag ${env.IMAGE_NAME}:${env.IMAGE_TAG} ${env.DOCKER_HUB_USR}/${env.IMAGE_NAME}:${env.IMAGE_TAG}"
 
                         echo "Pushing Image to Docker Hub..."
-                        sh "docker push ${env.DOCKER_HUB_USR}/${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+                        sh 'docker push harshini1402/csk:latest'
                     }
 
                     echo "Docker Push Completed Successfully!"
