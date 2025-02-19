@@ -1,0 +1,14 @@
+inputSet:
+  name: Build_project_usecases_1739955890898-pr-trigger-input-set
+  identifier: Build_project_usecases_1739955890898prtriggerinputset
+  orgIdentifier: default
+  projectIdentifier: SFTY_Training
+  pipeline:
+    identifier: Build_project_usecases_1739955890898
+    properties:
+      ci:
+        codebase:
+          build:
+            type: PR
+            spec:
+              number: <+trigger.prNumber>
