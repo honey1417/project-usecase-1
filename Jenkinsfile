@@ -45,46 +45,48 @@ pipeline {
             }
         }
 
-        // stage('Docker Build') {
-        //     steps {
-        //         sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'  
-        //     }
-        // }
+            // stage('Docker Build') {
+            //     steps {
+            //         sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'  
+            //     }
+            // }
 
         stage('Docker Build & Push') {
             steps {
                 script {
-                    echo "Building Docker Image: ${IMAGE_NAME}:${IMAGE_TAG}"
-                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                    echo "Building Docker Image: ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+                    sh "docker build -t ${env.IMAGE_NAME}:${env.IMAGE_TAG} ."
 
                     echo "Listing Docker Images..."
-                    sh 'docker images'
+                    sh "docker images"
+
+                    // Verify if the image exists before tagging
+                    sh '''
+                        docker images | grep "${IMAGE_NAME}" || { echo "Error: Docker image not found!"; exit 1; }
+                    '''
 
                     echo "Logging into Docker Hub..."
                     withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'DOCKER_HUB_USR', passwordVariable: 'DOCKER_HUB_PSW')]) {
                         sh '''
                             echo $DOCKER_HUB_PSW | docker login -u $DOCKER_HUB_USR --password-stdin
                         '''
+                        
+                        echo "Tagging Image..."
+                        sh "docker tag ${env.IMAGE_NAME}:${env.IMAGE_TAG} ${env.DOCKER_HUB_USR}/${env.IMAGE_NAME}:${env.IMAGE_TAG}"
+
+                        echo "Pushing Image to Docker Hub..."
+                        sh "docker push ${env.DOCKER_HUB_USR}/${env.IMAGE_NAME}:${env.IMAGE_TAG}"
                     }
-
-                    echo "Tagging Image..."
-                    sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}"
-
-
-                    echo "Pushing Image to Docker Hub..."
-                    sh "docker push ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}"
 
                     echo "Docker Push Completed Successfully!"
                 }
             }
         }
-
-
         stage('Terraform: Initialize') {
             steps {
                 echo 'Initializing Terraform'
                 sh 'terraform init'
-            }
+                }
         }
 
         stage('Terraform: Plan') {
