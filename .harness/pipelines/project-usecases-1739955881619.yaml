@@ -37,10 +37,20 @@ pipeline:
                       - latest
                   timeout: ""
                   type: BuildAndPushDockerRegistry
+              - step:
+                  type: BuildAndPushDockerRegistry
+                  name: BuildAndPushDockerRegistry_2
+                  identifier: BuildAndPushDockerRegistry_2
+                  spec:
+                    connectorRef: harshinidockerhub
+                    repo: usecase-1
+                    tags:
+                      - uc-1
           platform:
-            arch: Amd64
             os: Linux
+            arch: Amd64
           runtime:
+            type: Docker
             spec: {}
-            type: Cloud
         type: CI
+        description: ""
