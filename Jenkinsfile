@@ -55,7 +55,7 @@ pipeline {
             steps {
                 script {
                     //echo "Building Docker Image: ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
-                    sh "docker build -t csk:latest ."
+                    sh "docker build -t rcb ."
 
                     echo "Listing Docker Images..."
                     sh "docker images"
@@ -75,7 +75,7 @@ pipeline {
                         // sh "docker tag ${env.IMAGE_NAME}:${env.IMAGE_TAG} ${env.DOCKER_HUB_USR}/${env.IMAGE_NAME}:${env.IMAGE_TAG}"
 
                         echo "Pushing Image to Docker Hub..."
-                        sh 'docker tag csk:latest harshini1402/csk:latest'
+                        sh 'docker tag rcb:latest harshini1402/rcb:new'
 
                     }
 
