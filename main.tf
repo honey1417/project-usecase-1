@@ -11,7 +11,10 @@ resource "google_container_cluster" "primary" {
             "https://www.googleapis.com/auth/cloud-platform"
         ]
     }
+    remove_default_node_pool = true 
 }
+
+
 output "kubeconfig" {
     value = google_container_cluster.primary.endpoint
 }
