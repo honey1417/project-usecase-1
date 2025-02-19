@@ -122,7 +122,7 @@ pipeline {
                 script {
                     echo 'Updating Deployment YAML with latest Docker image...'
                     sh """
-                    sed -i 's|image: .*|image: ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}|' deploy.yml
+                    sed -i 's|image: .*|image: ${env.DOCKER_HUB_USR}/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_TAG}|' deploy.yml
                     """
                 }
             }
