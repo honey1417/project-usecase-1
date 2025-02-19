@@ -11,8 +11,8 @@ pipeline {
         PROJECT_ID = "harshini-450807"
         GKE_CLUSTER = "usecase-1-cluster"
         GKE_REGION = "us-central1"
-        //IMAGE_NAME = "usecase-1"
-        //IMAGE_TAG = "${BUILD_NUMBER}"
+        DOCKER_IMAGE_NAME = "usecase-1"
+        DOCKER_TAG = "${BUILD_NUMBER}"
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-creds')
         DOCKER_HUB_USR = "harshini1402"
         DOCKER_HUB_PSW = credentials('docker-creds')
@@ -44,42 +44,33 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-
-            // stage('Docker Build') {
-            //     steps {
-            //         sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'  
-            //     }
-            // }
-
-        stage('Docker Build & Push') {
+                stage('Build Docker Image') {
             steps {
                 script {
-                    //echo "Building Docker Image: ${env.IMAGE_NAME}:${env.IMAGE_TAG}"
-                    sh "docker build -t rcb ."
+                    sh 'docker build -t ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} .'
+                }
+            }
+        }
 
-                    echo "Listing Docker Images..."
-                    sh "docker images"
+        stage('Login to Docker Hub') {
+            steps {
+                script {
+                    sh """
+                    echo $DOCKER_HUB_PSW | docker login -u $DOCKER_HUB_USR --password-stdin
+                    """
+                }
+            }
+        }
 
-                    // Verify if the image exists before tagging
-                    sh '''
-                        docker images | grep "${IMAGE_NAME}" || { echo "Error: Docker image not found!"; exit 1; }
-                    '''
-
-                    echo "Logging into Docker Hub..."
-                    withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'DOCKER_HUB_USR', passwordVariable: 'DOCKER_HUB_PSW')]) {
-                        sh '''
-                            echo $DOCKER_HUB_PSW | docker login -u $DOCKER_HUB_USR --password-stdin
-                        '''
-                        
-                        // echo "Tagging Image..."
-                        // sh "docker tag ${env.IMAGE_NAME}:${env.IMAGE_TAG} ${env.DOCKER_HUB_USR}/${env.IMAGE_NAME}:${env.IMAGE_TAG}"
-
-                        echo "Pushing Image to Docker Hub..."
-                        sh 'docker tag rcb:latest harshini1402/rcb:new'
-
-                    }
-
-                    echo "Docker Push Completed Successfully!"
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                script {
+                    sh """
+                    docker tag ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} ${DOCKER_HUB_USR}/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
+                    """
+                    sh """
+                    docker push ${DOCKER_HUB_USR}/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
+                    """
                 }
             }
         }
