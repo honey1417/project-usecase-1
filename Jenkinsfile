@@ -56,7 +56,13 @@ pipeline {
             steps {
                 script {
                     sh """
-                    echo \$DOCKER_HUB_PSW | docker login -u \$DOCKER_HUB_USR --password-stdin
+                    withCredentials([string(credentialsId: 'docker-creds', variable: 'docker-creds')]) {
+                    
+                    //echo $DOCKER_HUB_PSW | docker login -u $DOCKER_HUB_USR --password-stdin
+
+                    docker login -u $DOCKER_HUB_USR --password-stdin
+
+                    }
                     """
                 }
             }
