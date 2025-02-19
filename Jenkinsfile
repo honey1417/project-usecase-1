@@ -68,7 +68,8 @@ pipeline {
                     }
 
                     echo "Tagging Image..."
-                    sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker tag ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}"
+
 
                     echo "Pushing Image to Docker Hub..."
                     sh "docker push ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}"
