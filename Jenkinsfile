@@ -66,8 +66,8 @@ pipeline {
 
         stage('Docker Build & Push') {
             steps {  
-                sh 'docker tag harshini1402/usecase-1:${BUILD_NUMBER} harshini1402/usecase-1:${BUILD_NUMBER}'
-                sh 'docker push harshini1402/usecase-1:${BUILD_NUMBER}'
+                sh 'docker tag harshini1402/usecase-1:${IMAGE_TAG} harshini1402/usecase-1:${IMAGE_TAG}'
+                sh 'docker push harshini1402/usecase-1:${IMAGE_TAG}'
             }
         }
 
