@@ -51,28 +51,33 @@ pipeline {
             }
         }
 
-        stage('Login to Docker Hub') {
+        stage('Docker Build & Push') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'DOCKER_HUB_USR', passwordVariable: 'DOCKER_HUB_PSW')]) {
-                    script {
-                        // Secure Docker login with Jenkins credentials
+                script {
+                    echo "Building Docker Image: ${IMAGE_NAME}:${IMAGE_TAG}"
+                    sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
+
+                    echo "Listing Docker Images..."
+                    sh 'docker images'
+
+                    echo "Logging into Docker Hub..."
+                    withCredentials([usernamePassword(credentialsId: 'docker-creds', usernameVariable: 'DOCKER_HUB_USR', passwordVariable: 'DOCKER_HUB_PSW')]) {
                         sh '''
                             echo $DOCKER_HUB_PSW | docker login -u $DOCKER_HUB_USR --password-stdin
                         '''
-                         sh 'docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}'
-                         sh 'docker push ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}'
                     }
+
+                    echo "Tagging Image..."
+                    sh 'docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}'
+
+                    echo "Pushing Image to Docker Hub..."
+                    sh 'docker push ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}'
+
+                    echo "Docker Push Completed Successfully!"
                 }
             }
         }
 
-        // stage('Push Docker image to Docker Hub') {
-        //     steps {
-        //         sh 'docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}'
-        //         sh 'docker push ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}' 
-        //     }
-
-        // }
 
         stage('Terraform: Initialize') {
             steps {
