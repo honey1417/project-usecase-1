@@ -11,7 +11,7 @@ pipeline {
         PROJECT_ID = "harshini-450807"
         GKE_CLUSTER = "usecase-1-cluster"
         GKE_REGION = "us-central1"
-        IMAGE_NAME = "my-project-uc-1"
+        IMAGE_NAME = "usecase-1"
         IMAGE_TAG = "${BUILD_NUMBER}"
         GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-creds')
         DOCKER_HUB_USR = "harshini1402"
