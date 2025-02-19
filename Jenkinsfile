@@ -47,7 +47,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'  
+                sh 'docker build -t ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG} .'  
             }
         }
 
@@ -129,11 +129,11 @@ pipeline {
 
                         // Deploy to Kubernetes
                         sh 'kubectl apply -f deploy.yml'
-                        sh 'kubectl set image deployment/demo-app demo-app=${IMAGE_NAME}:${IMAGE_TAG}'
-                        sh 'kubectl rollout status deployment demo-app'
+                        sh 'kubectl set image deployment/project-uc1-deployment  project-uc1-deployment=${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}'
+                        sh 'kubectl rollout status deployment 
                         sh 'sleep 15'
                         sh 'kubectl get deployments'
-                        sh 'kubectl describe deployment demo-app'
+                        sh 'kubectl describe deployment project-uc1-deployment'
                         sh 'kubectl get pods'
                         sh 'kubectl get svc'
                         echo 'Deployment and service details retrieved.'
@@ -151,7 +151,7 @@ pipeline {
             script {
                 if (params.ROLLBACK) {
                     echo "Rolling back to Previous Version"
-                    sh 'kubectl rollout undo deployment demo-app --to-revision=1'
+                    sh 'kubectl rollout undo deployment project-uc1-deployment --to-revision=1'
                 } else {
                     echo "Deployment failed! No rollback triggered."
                 }
