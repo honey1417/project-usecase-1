@@ -68,15 +68,23 @@ pipeline {
         stage('Push Docker Image to Docker Hub') {
             steps {
                 script {
+                    withCredentials([string(credentialsId: 'docker-creds', variable: 'DOCKER_HUB_TOKEN')]) {
+                        sh """
+                        echo "$DOCKER_HUB_TOKEN" | docker login -u "harshini1402" --password-stdin
+                        """
+                    }
+
                     sh """
-                    docker tag ${DOCKER_IMAGE_NAME}:${DOCKER_TAG} ${DOCKER_HUB_USR}/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
+                    docker tag ${env.DOCKER_IMAGE_NAME}:${env.DOCKER_TAG} harshini1402/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_TAG}
                     """
+
                     sh """
-                    docker push ${DOCKER_HUB_USR}/${DOCKER_IMAGE_NAME}:${DOCKER_TAG}
+                    docker push harshini1402/${env.DOCKER_IMAGE_NAME}:${env.DOCKER_TAG}
                     """
                 }
             }
         }
+
         stage('Terraform: Initialize') {
             steps {
                 echo 'Initializing Terraform'
