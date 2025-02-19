@@ -64,11 +64,12 @@ pipeline {
             }
         }
 
-        stage('Docker Build & Push') {
-            steps {  
-                sh 'docker tag harshini1402/usecase-1:${IMAGE_TAG} harshini1402/usecase-1:${IMAGE_TAG}'
-                sh 'docker push harshini1402/usecase-1:${IMAGE_TAG}'
+        stage('Push Docker image to Docker Hub') {
+            steps {
+                sh 'docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}'
+                sh 'docker push ${DOCKER_HUB_USR}/${IMAGE_NAME}:${IMAGE_TAG}' 
             }
+
         }
 
         stage('Terraform: Initialize') {
